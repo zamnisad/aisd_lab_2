@@ -132,22 +132,3 @@ class AVLT(BST):
 
         check_balance(self.root)
 
-
-get_dependence(False, "AVL.txt", AVLT)
-# tree = AVLT(50)
-# for i in [30, 70, 20, 40, 60, 80, 120, 160, 200, 90, 24, 21]:
-#     tree.push(i)
-#
-# print("Tree before removal:")
-# tree.print()
-# tree.get_tree_balance()
-#
-# tree.remove(70)  # Удаляем элемент 70
-# print("\nTree after removal of 70:")
-# tree.print()
-# tree.get_tree_balance()
-#
-# tree.remove(50)  # Удаляем корень
-# print("\nTree after removal of 50:")
-# tree.print()
-# tree.get_tree_balance()

@@ -214,20 +214,3 @@ class RBT(BST):
         if node:
             node.color = "b"
 
-
-# get_dependence(False, "RB.txt", RBT)
-
-tree = RBT(50)
-for i in [30, 70, 20, 40, 60, 80, 120, 160, 200, 90, 24, 21]:
-    tree.push(i)
-
-print("Tree before removal:")
-tree.print()
-
-tree.remove(70)  # Удаляем элемент 70
-print("\nTree after removal of 70:")
-tree.print()
-
-tree.remove(50)  # Удаляем корень
-print("\nTree after removal of 50:")
-tree.print()

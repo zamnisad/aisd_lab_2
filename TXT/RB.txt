@@ -13,3 +13,8 @@ Size: 12000	Height: 22
 Size: 13000	Height: 22
 Size: 14000	Height: 24
 Size: 15000	Height: 24
+Size: 16000	Height: 24
+Size: 17000	Height: 25
+Size: 18000	Height: 23
+Size: 19000	Height: 25
+Size: 20000	Height: 23

@@ -1,5 +1,6 @@
 import os.path
 import random
+from collections import deque
 from dop import Errors
 
 
@@ -134,6 +135,36 @@ class BST:
 
         print_in_order(self.root)
 
+    def dfs(self):
+        result = []
+
+        def _dfs(node):
+            if node:
+                result.append(node.data)
+                _dfs(node.left_kid)
+                _dfs(node.right_kid)
+
+        _dfs(self.root)
+        return result
+
+    def bfs(self):
+        result = []
+        if not self.root:
+            return result
+
+        queue = deque([self.root])
+
+        while queue:
+            node = queue.popleft()
+            result.append(node.data)
+
+            if node.left_kid:
+                queue.append(node.left_kid)
+            if node.right_kid:
+                queue.append(node.right_kid)
+
+        return result
+
 
 def get_dependence(rand, file, model, maximum=20001, stride=1000):
     def _generate_arr(maxi):
@@ -154,19 +185,3 @@ def get_dependence(rand, file, model, maximum=20001, stride=1000):
             f.write(f"Size: {i}\tHeight: {tree.height}\n")
             print(f"Size: {i}\tHeight: {tree.height}")
 
-
-get_dependence(True, "BST.txt", BST)
-# tree = BST(50)
-# for i in [30, 70, 20, 40, 60, 80]:
-#     tree.push(i)
-#
-# print("Tree before removal:")
-# tree.print()
-#
-# tree.remove(70)  # Удаляем элемент 70
-# print("\nTree after removal of 70:")
-# tree.print()
-#
-# tree.remove(50)  # Удаляем корень
-# print("\nTree after removal of 50:")
-# tree.print()
