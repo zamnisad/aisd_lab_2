@@ -1,4 +1,4 @@
-from binary_search_tree import Node, BST
+from binary_search_tree import Node, BST, get_dependence
 from dop import Errors
 
 
@@ -105,6 +105,8 @@ class RBT(BST):
         self.size += 1
 
         self.insert_fix(w_node)
+        self.update_height(self.root)
+        self.height = self.root.height
 
     def print(self):
         def print_in_order(node, level=0, prefix="Root: "):
@@ -125,7 +127,6 @@ class RBT(BST):
     def remove(self, data):
         node = self.search(data)
         if node is None:
-            print(Errors.not_search(data))
             return
 
         if node.left_kid and node.right_kid:
@@ -159,7 +160,9 @@ class RBT(BST):
         self.size -= 1
 
     def _remove_fix(self, node):
-        while node != self.root and (node is None or node.color == "b"):
+        if node is None:
+            return
+        while node != self.root and node.color == "b":
             if node == node.parent.left_kid:
                 sibling = node.parent.right_kid
                 if sibling.color == "r":
@@ -211,8 +214,20 @@ class RBT(BST):
         if node:
             node.color = "b"
 
-    @staticmethod
-    def _find_min(node):
-        while node.left_kid:
-            node = node.left_kid
-        return node
+
+# get_dependence(False, "RB.txt", RBT)
+
+tree = RBT(50)
+for i in [30, 70, 20, 40, 60, 80, 120, 160, 200, 90, 24, 21]:
+    tree.push(i)
+
+print("Tree before removal:")
+tree.print()
+
+tree.remove(70)  # Удаляем элемент 70
+print("\nTree after removal of 70:")
+tree.print()
+
+tree.remove(50)  # Удаляем корень
+print("\nTree after removal of 50:")
+tree.print()

@@ -1,5 +1,5 @@
 from dop import Errors
-from binary_search_tree import BST, Node
+from binary_search_tree import BST, Node, get_dependence
 
 
 class AVLT(BST):
@@ -14,6 +14,8 @@ class AVLT(BST):
         return self.get_height(node.left_kid) - self.get_height(node.right_kid) if node else 0
 
     def r_rotate(self, y):
+        if not y or not y.left_kid:
+            return y
         x = y.left_kid
         T = x.right_kid
 
@@ -26,6 +28,8 @@ class AVLT(BST):
         return x
 
     def l_rotate(self, x):
+        if not x or not x.right_kid:
+            return x
         y = x.right_kid
         T = y.left_kid
 
@@ -38,20 +42,19 @@ class AVLT(BST):
         return y
 
     def balancing(self, node):
+        if not node:
+            return None
+
         balance = self.get_balance(node)
 
-        if balance > 1 and self.get_balance(node.left_kid) >= 0:
+        if balance > 1:
+            if self.get_balance(node.left_kid) < 0:
+                node.left_kid = self.l_rotate(node.left_kid)
             return self.r_rotate(node)
 
-        if balance > 1 and self.get_balance(node.left_kid) < 0:
-            node.left_kid = self.l_rotate(node.left_kid)
-            return self.r_rotate(node)
-
-        if balance < -1 and self.get_balance(node.right_kid) >= 0:
-            return self.l_rotate(node)
-
-        if balance < -1 and self.get_balance(node.right_kid) < 0:
-            node.right_kid = self.r_rotate(node.right_kid)
+        if balance < -1:
+            if self.get_balance(node.right_kid) > 0:
+                node.right_kid = self.r_rotate(node.right_kid)
             return self.l_rotate(node)
 
         return node
@@ -76,6 +79,32 @@ class AVLT(BST):
 
         self.root = _insert(self.root, data)
         self.size += 1
+        self.update_height(self.root)
+        self.height = self.root.height
+
+    def _remove(self, node, node_to_remove):
+        if not node:
+            return None
+
+        if node_to_remove.data < node.data:
+            node.left_kid = self._remove(node.left_kid, node_to_remove)
+        elif node_to_remove.data > node.data:
+            node.right_kid = self._remove(node.right_kid, node_to_remove)
+        else:
+            if not node.left_kid and not node.right_kid:
+                return None
+            elif not node.left_kid:
+                return node.right_kid
+            elif not node.right_kid:
+                return node.left_kid
+
+            min_node = self._find_min(node.right_kid)
+            node.data = min_node.data
+            node.right_kid = self._remove(node.right_kid, min_node)
+
+        node.height = 1 + max(self.get_height(node.left_kid), self.get_height(node.right_kid))
+
+        return self.balancing(node)
 
     def print(self):
         def print_in_order(node, level=0, prefix="Root: "):
@@ -104,16 +133,21 @@ class AVLT(BST):
         check_balance(self.root)
 
 
-# Тестируем работу AVL дерева
-avl_tree = AVLT(30)
-elements = [20, 40, 10, 25, 50, 30, 35]
-
-print("Добавляем элементы:")
-for elem in elements:
-    avl_tree.push(elem)
-
-# Печатаем дерево в виде структуры
-avl_tree.print()
-
-# Проверка баланса дерева
-avl_tree.get_tree_balance()
+get_dependence(False, "AVL.txt", AVLT)
+# tree = AVLT(50)
+# for i in [30, 70, 20, 40, 60, 80, 120, 160, 200, 90, 24, 21]:
+#     tree.push(i)
+#
+# print("Tree before removal:")
+# tree.print()
+# tree.get_tree_balance()
+#
+# tree.remove(70)  # Удаляем элемент 70
+# print("\nTree after removal of 70:")
+# tree.print()
+# tree.get_tree_balance()
+#
+# tree.remove(50)  # Удаляем корень
+# print("\nTree after removal of 50:")
+# tree.print()
+# tree.get_tree_balance()
