@@ -136,15 +136,48 @@ class BST:
         print_in_order(self.root)
 
     def dfs(self):
-        result = []
+        def _dfs_in_order(node):
+            if node:
+                _dfs_in_order(node.left_kid)
+                result.append(node.data)
+                _dfs_in_order(node.right_kid)
 
-        def _dfs(node):
+        def _dfs_pre_order(node):
             if node:
                 result.append(node.data)
-                _dfs(node.left_kid)
-                _dfs(node.right_kid)
+                _dfs_pre_order(node.left_kid)
+                _dfs_pre_order(node.right_kid)
 
-        _dfs(self.root)
+        def _dfs_post_order(node):
+            if node:
+                _dfs_post_order(node.left_kid)
+                _dfs_post_order(node.right_kid)
+                result.append(node.data)
+
+        result = []
+        _dfs_pre_order(self.root)
+        return result
+
+    def dfs_in_order(self):
+        result = []
+        def _dfs_in_order(node):
+            if node:
+                _dfs_in_order(node.left_kid)
+                result.append(node.data)
+                _dfs_in_order(node.right_kid)
+
+        _dfs_in_order(self.root)
+        return result
+
+    def dfs_post_order(self):
+        result = []
+        def _dfs_post_order(node):
+            if node:
+                _dfs_post_order(node.left_kid)
+                _dfs_post_order(node.right_kid)
+                result.append(node.data)
+
+        _dfs_post_order(self.root)
         return result
 
     def bfs(self):
